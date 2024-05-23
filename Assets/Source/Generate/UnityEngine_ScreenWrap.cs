@@ -107,10 +107,9 @@ public class UnityEngine_ScreenWrap
 			ToLua.CheckArgsCount(L, 2);
 			UnityEngine.DisplayInfo arg0 = StackTraits<UnityEngine.DisplayInfo>.Check(L, 1);
 			UnityEngine.Vector2Int arg1 = StackTraits<UnityEngine.Vector2Int>.Check(L, 2);
-			UnityEngine.AsyncOperation o = UnityEngine.Screen.MoveMainWindowTo(ref arg0, arg1);
+			UnityEngine.AsyncOperation o = UnityEngine.Screen.MoveMainWindowTo(arg0, arg1);
 			ToLua.PushObject(L, o);
-			ToLua.PushValue(L, arg0);
-			return 2;
+			return 1;
 		}
 		catch (Exception e)
 		{

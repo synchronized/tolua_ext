@@ -469,9 +469,8 @@ public class UnityEngine_MaterialWrap
 			{
 				UnityEngine.Material obj = (UnityEngine.Material)ToLua.CheckObject<UnityEngine.Material>(L, 1);
 				UnityEngine.Rendering.LocalKeyword arg0 = StackTraits<UnityEngine.Rendering.LocalKeyword>.To(L, 2);
-				obj.EnableKeyword(ref arg0);
-				ToLua.PushValue(L, arg0);
-				return 1;
+				obj.EnableKeyword(arg0);
+				return 0;
 			}
 			else
 			{
@@ -502,9 +501,8 @@ public class UnityEngine_MaterialWrap
 			{
 				UnityEngine.Material obj = (UnityEngine.Material)ToLua.CheckObject<UnityEngine.Material>(L, 1);
 				UnityEngine.Rendering.LocalKeyword arg0 = StackTraits<UnityEngine.Rendering.LocalKeyword>.To(L, 2);
-				obj.DisableKeyword(ref arg0);
-				ToLua.PushValue(L, arg0);
-				return 1;
+				obj.DisableKeyword(arg0);
+				return 0;
 			}
 			else
 			{
@@ -536,10 +534,9 @@ public class UnityEngine_MaterialWrap
 			{
 				UnityEngine.Material obj = (UnityEngine.Material)ToLua.CheckObject<UnityEngine.Material>(L, 1);
 				UnityEngine.Rendering.LocalKeyword arg0 = StackTraits<UnityEngine.Rendering.LocalKeyword>.To(L, 2);
-				bool o = obj.IsKeywordEnabled(ref arg0);
+				bool o = obj.IsKeywordEnabled(arg0);
 				LuaDLL.lua_pushboolean(L, o);
-				ToLua.PushValue(L, arg0);
-				return 2;
+				return 1;
 			}
 			else
 			{
@@ -561,9 +558,8 @@ public class UnityEngine_MaterialWrap
 			UnityEngine.Material obj = (UnityEngine.Material)ToLua.CheckObject<UnityEngine.Material>(L, 1);
 			UnityEngine.Rendering.LocalKeyword arg0 = StackTraits<UnityEngine.Rendering.LocalKeyword>.Check(L, 2);
 			bool arg1 = LuaDLL.luaL_checkboolean(L, 3);
-			obj.SetKeyword(ref arg0, arg1);
-			ToLua.PushValue(L, arg0);
-			return 1;
+			obj.SetKeyword(arg0, arg1);
+			return 0;
 		}
 		catch (Exception e)
 		{

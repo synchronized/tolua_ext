@@ -102,9 +102,8 @@ public class UnityEngine_ShaderWrap
 			else if (count == 1 && TypeChecker.CheckTypes<UnityEngine.Rendering.GlobalKeyword>(L, 1))
 			{
 				UnityEngine.Rendering.GlobalKeyword arg0 = StackTraits<UnityEngine.Rendering.GlobalKeyword>.To(L, 1);
-				UnityEngine.Shader.EnableKeyword(ref arg0);
-				ToLua.PushValue(L, arg0);
-				return 1;
+				UnityEngine.Shader.EnableKeyword(arg0);
+				return 0;
 			}
 			else
 			{
@@ -133,9 +132,8 @@ public class UnityEngine_ShaderWrap
 			else if (count == 1 && TypeChecker.CheckTypes<UnityEngine.Rendering.GlobalKeyword>(L, 1))
 			{
 				UnityEngine.Rendering.GlobalKeyword arg0 = StackTraits<UnityEngine.Rendering.GlobalKeyword>.To(L, 1);
-				UnityEngine.Shader.DisableKeyword(ref arg0);
-				ToLua.PushValue(L, arg0);
-				return 1;
+				UnityEngine.Shader.DisableKeyword(arg0);
+				return 0;
 			}
 			else
 			{
@@ -165,10 +163,9 @@ public class UnityEngine_ShaderWrap
 			else if (count == 1 && TypeChecker.CheckTypes<UnityEngine.Rendering.GlobalKeyword>(L, 1))
 			{
 				UnityEngine.Rendering.GlobalKeyword arg0 = StackTraits<UnityEngine.Rendering.GlobalKeyword>.To(L, 1);
-				bool o = UnityEngine.Shader.IsKeywordEnabled(ref arg0);
+				bool o = UnityEngine.Shader.IsKeywordEnabled(arg0);
 				LuaDLL.lua_pushboolean(L, o);
-				ToLua.PushValue(L, arg0);
-				return 2;
+				return 1;
 			}
 			else
 			{
@@ -189,9 +186,8 @@ public class UnityEngine_ShaderWrap
 			ToLua.CheckArgsCount(L, 2);
 			UnityEngine.Rendering.GlobalKeyword arg0 = StackTraits<UnityEngine.Rendering.GlobalKeyword>.Check(L, 1);
 			bool arg1 = LuaDLL.luaL_checkboolean(L, 2);
-			UnityEngine.Shader.SetKeyword(ref arg0, arg1);
-			ToLua.PushValue(L, arg0);
-			return 1;
+			UnityEngine.Shader.SetKeyword(arg0, arg1);
+			return 0;
 		}
 		catch (Exception e)
 		{
