@@ -24,6 +24,44 @@ public static class CustomSettings
 
     public const string LUAJIT_CMD_OPTION = "-b -g";    //luajit.exe 编译命令行参数
 
+    //LuaBinder,Wrap需要加上对应的宏
+    public static Dictionary<List<string>, List<string>> conditionalCompilationSymbos = new Dictionary<List<string>, List<string>>(){
+        //小游戏不需要的wrap
+        {new List<string> {"!WXMINI_GAME"}, new List<string>
+            {
+                "IAPManager",
+                "Purchasing",
+                "UnityEngine_Purchasing_ConfigurationBuilder",
+                "UnityEngine_Purchasing_UnityPurchasing",
+                "UnityEngine_Purchasing_ProductType",
+                "UnityEngine_Purchasing_Product",
+                "UnityEngine_Purchasing_ProductCollection",
+                "UnityEngine_Purchasing_ProductDefinition",
+            }
+        },
+        //小游戏需要的wrap
+        {new List<string> {"WXMINI_GAME"}, new List<string>
+            {
+                "WeChatWASM_WX",
+                "WeChatWASM_WXBase",
+                "WeChatWASM_WXAssetBundle",
+                "WeChatWASM_DownloadHandlerWXAssetBundle",
+                "WeChatWASM_AppBaseInfo",
+            }
+        },
+
+    };
+
+    //方法或者属性需要加上对应的宏
+    public static Dictionary<List<string>, List<string>> conditionalCompilationSymbos_MethodOrProperty = new Dictionary<List<string>, List<string>>(){
+        //UNITY_ANDROID
+        //{new List<string> {"UNITY_ANDROID"}, new List<string>{"PlatformBridgeManager,GetAndroidJavaObject"}},
+
+        //该属性build时会报错
+        {new List<string> {"UNITY_EDITOR"}, new List<string>{"UnityEngine.Rendering.GraphicsSettings,videoShadersIncludeMode"}},
+    };
+
+
     //导出时强制做为静态类的类型(注意customTypeList 还要添加这个类型才能导出)
     //unity 有些类作为sealed class, 其实完全等价于静态类
     public static List<Type> staticClassTypes = new List<Type>
