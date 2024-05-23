@@ -1480,9 +1480,11 @@ namespace LuaInterface
         /*
         ** third party library
         */
+        /*
         [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
 	    [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         public static extern int luaopen_pb(IntPtr L);
+        */
 
 #if !LUAC_5_3
         [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
@@ -1517,5 +1519,41 @@ namespace LuaInterface
         [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
 	    [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         public static extern int luaopen_cjson_safe(IntPtr L);
+
+        /*
+        ** add new library
+        */
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+	    [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        public static extern int luaopen_pb(IntPtr L);
+
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+	    [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        public static extern int luaopen_pb_io(IntPtr L);
+
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+	    [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        public static extern int luaopen_pb_conv(IntPtr L);
+
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+	    [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        public static extern int luaopen_pb_buffer(IntPtr L);
+
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+	    [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        public static extern int luaopen_pb_slice(IntPtr L);
+
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+	    [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        public static extern int luaopen_pb_unsafe(IntPtr L);
+
+
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+	    [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        public static extern int luaopen_sproto_core(IntPtr L);
+
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+	    [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        public static extern int luaopen_crypt(IntPtr L);
     }
 }
