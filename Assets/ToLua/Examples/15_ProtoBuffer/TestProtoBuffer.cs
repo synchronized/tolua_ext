@@ -80,11 +80,7 @@ public class TestProtoBuffer : LuaClient
     //pb_data = msg.data    
     new void Awake()
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(ShowTips);
-#else
         Application.logMessageReceived += ShowTips;
-#endif
         Instance = this;            
     }
 
@@ -167,11 +163,7 @@ public class TestProtoBuffer : LuaClient
     new void OnApplicationQuit()
     {
         base.Destroy();
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(null);
 
-#else
         Application.logMessageReceived -= ShowTips;
-#endif
     }
 }

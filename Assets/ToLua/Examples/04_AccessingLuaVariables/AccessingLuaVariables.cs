@@ -23,11 +23,8 @@ public class AccessingLuaVariables : MonoBehaviour
 
 	void Start () 
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(ShowTips);
-#else
         Application.logMessageReceived += ShowTips;
-#endif
+
         new LuaResLoader();
         LuaState lua = new LuaState();
         lua.Start();
@@ -75,12 +72,8 @@ public class AccessingLuaVariables : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(null);
 
-#else
         Application.logMessageReceived -= ShowTips;
-#endif
     }
 
     string tips = null;

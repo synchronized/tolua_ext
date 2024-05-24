@@ -68,11 +68,7 @@ public class TestReflection : LuaClient
 
     protected override LuaFileUtils InitLoader()
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(ShowTips);        
-#else
         Application.logMessageReceived += ShowTips;
-#endif
         return new LuaResLoader();
     }
 
@@ -130,11 +126,7 @@ public class TestReflection : LuaClient
 
     new void OnApplicationQuit()
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(ShowTips);        
-#else
         Application.logMessageReceived += ShowTips;
-#endif
         Destroy();
     }
 

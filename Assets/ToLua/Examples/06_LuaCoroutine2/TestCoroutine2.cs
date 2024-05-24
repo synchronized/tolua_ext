@@ -129,11 +129,7 @@ public class TestCoroutine2 : LuaClient
 
     void Start()
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(ShowTips);
-#else
         Application.logMessageReceived += ShowTips;
-#endif
     }
 
     void ShowTips(string msg, string stackTrace, LogType type)
@@ -144,12 +140,8 @@ public class TestCoroutine2 : LuaClient
 
     new void OnApplicationQuit()
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(null);
-
-#else
         Application.logMessageReceived -= ShowTips;
-#endif
+        
         base.OnApplicationQuit();
     }
 

@@ -12,11 +12,8 @@ public class TestCoroutine : MonoBehaviour
 
 	void Awake () 
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(ShowTips);
-#else
         Application.logMessageReceived += ShowTips;
-#endif      
+
         new LuaResLoader();
         lua  = new LuaState();
         lua.Start();
@@ -38,12 +35,8 @@ public class TestCoroutine : MonoBehaviour
         looper.Destroy();
         lua.Dispose();
         lua = null;
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(null);
 
-#else
         Application.logMessageReceived -= ShowTips;
-#endif
     }
 
     string tips = null;

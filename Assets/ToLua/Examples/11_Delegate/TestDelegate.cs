@@ -119,11 +119,8 @@ public class TestDelegate: MonoBehaviour
     //需要删除的转LuaFunction为委托，不需要删除的直接加或者等于即可
     void Awake()
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(ShowTips);
-#else
         Application.logMessageReceived += ShowTips;
-#endif
+
         new LuaResLoader();
         state = new LuaState();
         state.Start();
@@ -416,11 +413,7 @@ public class TestDelegate: MonoBehaviour
         SafeRelease(ref TestOverride);
         state.Dispose();
         state = null;
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(null);
 
-#else
         Application.logMessageReceived -= ShowTips;
-#endif  
     }
 }

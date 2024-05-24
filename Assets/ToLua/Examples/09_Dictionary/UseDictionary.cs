@@ -65,11 +65,8 @@ public class UseDictionary : MonoBehaviour
 
 	void Awake () 
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(ShowTips);
-#else
         Application.logMessageReceived += ShowTips;
-#endif
+
         new LuaResLoader();
         map.Add(1, new TestAccount(1, "水水", 0));
         map.Add(2, new TestAccount(2, "王伟", 1));
@@ -95,12 +92,7 @@ public class UseDictionary : MonoBehaviour
 
     void OnApplicationQuit()
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(null);
-
-#else
         Application.logMessageReceived -= ShowTips;
-#endif       
     }
 
     string tips = "";

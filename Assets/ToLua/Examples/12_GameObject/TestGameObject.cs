@@ -36,11 +36,8 @@ public class TestGameObject: MonoBehaviour
 
     void Start()
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(ShowTips);
-#else
         Application.logMessageReceived += ShowTips;
-#endif
+
         new LuaResLoader();
         lua = new LuaState();
         lua.LogGC = true;
@@ -67,12 +64,8 @@ public class TestGameObject: MonoBehaviour
     {        
         lua.Dispose();
         lua = null;
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(null);
 
-#else
         Application.logMessageReceived -= ShowTips;
-#endif 
     }
 
     void OnGUI()
