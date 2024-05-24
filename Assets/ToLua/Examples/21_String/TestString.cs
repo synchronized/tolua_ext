@@ -32,11 +32,8 @@ public class TestString : LuaClient
 
     protected override void OnLoadFinished()
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(ShowTips);
-#else
         Application.logMessageReceived += ShowTips;
-#endif
+
         base.OnLoadFinished();
         luaState.DoString(script, "TestString.cs");
         LuaFunction func = luaState.GetFunction("Test");
@@ -57,12 +54,7 @@ public class TestString : LuaClient
     {
         base.OnApplicationQuit();
 
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(null);
-
-#else
         Application.logMessageReceived -= ShowTips;
-#endif
     }
 
     void OnGUI()

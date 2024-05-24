@@ -21,11 +21,8 @@ public class TestCJson : LuaClient
 
     protected override void OnLoadFinished()
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(ShowTips);
-#else
         Application.logMessageReceived += ShowTips;
-#endif
+
         base.OnLoadFinished();
 
         TextAsset text = (TextAsset)Resources.Load("jsonexample", typeof(TextAsset));
@@ -54,12 +51,7 @@ public class TestCJson : LuaClient
     {
         base.OnApplicationQuit();
 
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(null);
-
-#else
         Application.logMessageReceived -= ShowTips;
-#endif
     }
 
     void OnGUI()

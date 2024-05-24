@@ -40,11 +40,8 @@ public class TestLuaThread : MonoBehaviour
 
     void Start () 
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(ShowTips);
-#else
         Application.logMessageReceived += ShowTips;
-#endif
+
         new LuaResLoader();
         state = new LuaState();
         state.Start();
@@ -73,12 +70,8 @@ public class TestLuaThread : MonoBehaviour
 
         state.Dispose();
         state = null;
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(null);
 
-#else
         Application.logMessageReceived -= ShowTips;
-#endif
     }
 
     void ShowTips(string msg, string stackTrace, LogType type)

@@ -12,11 +12,7 @@ public class TestPerformance : MonoBehaviour
 
     private void Start()
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(ShowTips);        
-#else
         Application.logMessageReceived += ShowTips;
-#endif
         new LuaResLoader();
         state = new LuaState();
         state.Start();
@@ -32,11 +28,7 @@ public class TestPerformance : MonoBehaviour
 
     void OnApplicationQuit()
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(null);        
-#else
         Application.logMessageReceived -= ShowTips;
-#endif
         state.Dispose();
         state = null;
     }

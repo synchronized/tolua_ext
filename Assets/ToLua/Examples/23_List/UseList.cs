@@ -152,11 +152,8 @@ public class UseList : LuaClient
 
     protected override void OnLoadFinished()
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(ShowTips);
-#else
         Application.logMessageReceived += ShowTips;
-#endif         
+
         base.OnLoadFinished();
         luaState.DoString(script, "UseList.cs");
         List<int> list1 = new List<int>();
@@ -178,12 +175,7 @@ public class UseList : LuaClient
     new void OnApplicationQuit()
     {
         base.OnApplicationQuit();
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(null);
-
-#else
         Application.logMessageReceived -= ShowTips;
-#endif
     }
 
     void OnGUI()

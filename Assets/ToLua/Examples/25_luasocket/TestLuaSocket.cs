@@ -9,11 +9,7 @@ public class TestLuaSocket : LuaClient
 
     new void Awake()
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(ShowTips);
-#else
         Application.logMessageReceived += ShowTips;
-#endif
         base.Awake();
         // First, Clieck menu"Lua->Copy Lua  files to Resources"
         // Only provides http example here!Learn more luasocket knowladge through google.
@@ -35,12 +31,8 @@ public class TestLuaSocket : LuaClient
 
     new void OnApplicationQuit()
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(null);
 
-#else
         Application.logMessageReceived -= ShowTips;
-#endif
         luaState.Dispose();
         luaState = null;
     }

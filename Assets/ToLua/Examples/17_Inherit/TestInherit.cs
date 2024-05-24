@@ -73,11 +73,8 @@ public class TestInherit : MonoBehaviour
 
 	void Start () 
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(ShowTips);
-#else
         Application.logMessageReceived += ShowTips;
-#endif  
+
         new LuaResLoader();
         lua = new LuaState();        
         lua.Start();
@@ -109,12 +106,7 @@ public class TestInherit : MonoBehaviour
 
     void OnDestroy()
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(null);
-
-#else
         Application.logMessageReceived -= ShowTips;
-#endif
     }
 
     void OnGUI()

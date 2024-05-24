@@ -27,11 +27,8 @@ public class TestOutArg : MonoBehaviour
 
     void Start () 
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(ShowTips);
-#else
         Application.logMessageReceived += ShowTips;
-#endif
+
         new LuaResLoader();
         state = new LuaState();
         LuaBinder.Bind(state);
@@ -48,12 +45,7 @@ public class TestOutArg : MonoBehaviour
 
     void OnApplicationQuit()
     {
-#if UNITY_4_6 || UNITY_4_7
-        Application.RegisterLogCallback(null);
-
-#else
         Application.logMessageReceived -= ShowTips;
-#endif     
     }
 
     private void OnGUI()
