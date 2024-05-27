@@ -44,31 +44,35 @@ class Person
 public class TestProtoBuffer : LuaClient
 {
     private string script = @"      
-        local common_pb = require 'Protol.common_pb'
-        local person_pb = require 'Protol.person_pb'                
+        local pb = require 'pb'
+        local cjsonutil = require 'cjson.util'
+        assert(pb.loadfile 'Assets/ToLua/Examples/15_ProtoBuffer/protocol.pb')
 
         function Decoder()  
-            local msg = person_pb.Person()
-            msg:ParseFromString(TestProtol.data)
+            local msg = assert(pb.decode('Person', TestProtol.data))
+
             --tostring 不会打印默认值
-            print('person_pb decoder: '..tostring(msg)..'age: '..msg.age..'\nemail: '..msg.email)
+            print('person_pb decoder: '..cjsonutil.serialise_value(msg))
         end
 
         function Encoder()                     
-            local msg = person_pb.Person()                                 
-            msg.header.cmd = 10010                                 
-            msg.header.seq = 1
-            msg.id = '1223372036854775807'            
-            msg.name = 'foo'              
-            --数组添加                              
-            msg.array:append(1)                              
-            msg.array:append(2)            
-            --extensions 添加
-            local phone = msg.Extensions[person_pb.Phone.phones]:add()
-            phone.num = '13788888888'      
-            phone.type = person_pb.Phone.MOBILE      
-            local pb_data = msg:SerializeToString()                   
-            TestProtol.data = pb_data
+            local msg = {
+                header = {
+                    cmd = 10010,
+                    seq = 1,
+                },
+                id = '1223372036854775807',
+                name = 'foo',
+                array = {1, 2},
+                phones = {
+                    {
+                        num = '13788888888',
+                        type = pb.enum('Phone', 'MOBILE'),
+                    },
+                },
+            }
+
+            TestProtol.data = pb.encode('Person', msg)
         end
         ";
 
