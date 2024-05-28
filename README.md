@@ -37,17 +37,19 @@ https://github.com/tangzx/IntelliJ-EmmyLua<br>
 https://github.com/LabOfHoward/unity_tolua-_zerobrane_api<br>
 
 # Packages
-  |**Basics**             |**Math**            |**Data Structures**  |
-  |  luabitop             |  Quaternion        |  list               |
-  |  struct               |  Vector3           |  event              |
-  |  int64                |  Vector4           |  slot               |
-  |  Time                 |  Vector2           |                     |
-  |**Networking**         |  Ray               |                     |
-  |  luasocket            |  Color             |                     |
-  |**Parsing**            |  Bounds            |                     |
-  |  lpeg                 |  Mathf             |                     |
-  |**Protol**             |  Touch             |                     |
-  |  lua-protobuf         |  RaycastHit        |                     |
+  | **Basics**             | **Math**            | **Data Structures**  |
+  | ---------------------- | ------------------- | -------------------- |
+  |   luabitop             |   Quaternion        |   list               |
+  |   struct               |   Vector3           |   event              |
+  |   int64                |   Vector4           |   slot               |
+  |   Time                 |   Vector2           |                      |
+  | **Networking**         |   Ray               |                      |
+  |   luasocket            |   Color             |                      |
+  | **Parsing**            |   Bounds            |                      |
+  |   lpeg                 |   Mathf             |                      |
+  | **Protol**             |   Touch             |                      |
+  |   lua-protobuf         |   RaycastHit        |                      |
+
 # 特性
 * iOS、Android、Windows上支持luajit和lua5.3，MacOSX上支持lua5.1和lua5.3
 * 自动生成绑定代码文件，非反射调用 <br>
