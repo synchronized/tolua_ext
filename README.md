@@ -1,10 +1,16 @@
-## tolua#
+## 简介
+这个项目是https://github.com/topameng/tolua的克隆项目<br>
+升级Unity版本到2021
+使用[tolua_runtime_ext](https://github.com/synchronized/tolua_runtime_ext)替换了tolua_runtime<br>
+使用[lua-protobuf](https://github.com/starwing/lua-protobuf)替换了pblua<br>
+增加了[skynet](https://github.com/cloudwu/skynet)的crypt模块<br>
+增加了[sproto](https://github.com/cloudwu/sproto)模块<br>
+修改了Examples/15_ProtoBuffer的例子
 
+## tolua#
 tolua# is a Unity lua static binder solution. the first solution that analyzes code by reflection and generates wrapper classes.<br>
 It is a Unity plugin that greatly simplifies the integration of C# code with Lua. which can automatically generate the binding code to access Unity from Lua and map c# constants, variables, functions, properties, classes, and enums to Lua.<br>
 tolua# grows up from cstolua. it's goal is to be a powerful development environment for Unity.<br>
-Support unity4.6.x and Unity5.x all(copy /Unity5.x/Assets to /Assets) <br>
-If you want to test examples(example 1 is excluded)in mobile, first click menu Lua/Copy lua files to Resources. then build it <br>
 如果你想在手机上测试例子(例子1除外)，首先点击菜单Lua/Copy lua files to Resources， 之后再build. <br>
 
 欢迎大家点星支持，谢谢^_^<br>
@@ -16,30 +22,13 @@ tolua#技术群 286510803<br>
 
 
 # Library
-**tolua_runtime** <br>
-https://github.com/topameng/tolua_runtime <br>
+**tolua_runtime_ext** <br>
+https://github.com/synchronized/tolua_runtime_ext <br>
 **Debugger** <br>
 https://github.com/topameng/Debugger <br>
 **CString** <br>
 https://github.com/topameng/CString <br>
-**protoc-gen-lua** <br>
-https://github.com/topameng/protoc-gen-lua <br>
 
-# FrameWork and Demo
-**LuaFrameWork**<br>
-https://github.com/jarjin/LuaFramework_NGUI <br>
-https://github.com/jarjin/LuaFramework_UGUI <br>
-https://github.com/jarjin/LuaFramework_UGUI_V2 <br>
-**XlsxToLua**<br>
-https://github.com/zhangqi-ulua/XlsxToLua<br>
-**UnityHello**<br>
-https://github.com/woshihuo12/UnityHello<br>
-**UWA-ToLua**<br>
-http://uwa-download.oss-cn-beijing.aliyuncs.com/plugins%2FiOS%2FUWA-iOS-ToLua.zip<br>
-[StriveGame](https://github.com/liuxq/StriveGame)<br>
-[kbengine_unity3d_tolua_demo](https://github.com/liuxq/kbengine_unity3d_tolua_demo)<br>
-[UGFWithToLua](https://github.com/GarfieldJiang/UGFWithToLua)<br>
-[U3dFrameworkTolua](https://github.com/YKPublicGame/U3dFrameworkTolua)<br>
 
 # Debugger
 **EmmyLua**<br>
@@ -48,17 +37,19 @@ https://github.com/tangzx/IntelliJ-EmmyLua<br>
 https://github.com/LabOfHoward/unity_tolua-_zerobrane_api<br>
 
 # Packages
-　**Basics**　　　　　　　　**Math**　　　　　　**Data Structures**<br>
-　luabitop　　　　　　　Quaternion　　　　　　　list<br>
-　 struct　　　　　　　 　Vector3　　　　　　　　event<br>
-　 int64　　　　 　　　  　Vector4　　　　　　　　slot<br>
-　 Time　　　　 　　　  　Vector2<br>
-**Networking**　　　　 　　　Ray<br>
-　luasocket　　　　 　　　 Color<br>
-　**Parsing**　　　　 　　　Bounds<br>
-　lpeg　　 　　 　　　 　  　Mathf<br>
-　**Protol**　　　　　 　 　　 Touch<br>
-　pblua　　　 　　 　 　RaycastHit<br>
+  | **Basics**             | **Math**            | **Data Structures**  |
+  | ---------------------- | ------------------- | -------------------- |
+  |   luabitop             |   Quaternion        |   list               |
+  |   struct               |   Vector3           |   event              |
+  |   int64                |   Vector4           |   slot               |
+  |   Time                 |   Vector2           |                      |
+  | **Networking**         |   Ray               |                      |
+  |   luasocket            |   Color             |                      |
+  | **Parsing**            |   Bounds            |                      |
+  |   lpeg                 |   Mathf             |                      |
+  | **Protol**             |   Touch             |                      |
+  |   lua-protobuf         |   RaycastHit        |                      |
+
 # 特性
 * iOS、Android、Windows上支持luajit和lua5.3，MacOSX上支持lua5.1和lua5.3
 * 自动生成绑定代码文件，非反射调用 <br>
