@@ -24,8 +24,9 @@ public class AccessingArray : MonoBehaviour
                     print('table: '.. tostring(t[i]))
                 end
 
-                local pos = array:BinarySearch(3)
-                print('array BinarySearch: pos: '..pos..' value: '..array[pos])
+
+                --local pos = array:BinarySearch(3, function(i, j) return i < j end)
+                --print('array BinarySearch: pos: '..pos..' value: '..array[pos])
 
                 pos = array:IndexOf(4)
                 print('array indexof bbb pos is: '..pos)
@@ -88,7 +89,7 @@ public class AccessingArray : MonoBehaviour
     {
         Application.logMessageReceived -= ShowTips;
         
-        func.Dispose();
-        lua.Dispose();
+        func?.Dispose();
+        lua?.Dispose();
     }
 }

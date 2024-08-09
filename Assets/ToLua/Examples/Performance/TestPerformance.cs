@@ -13,9 +13,9 @@ public class TestPerformance : MonoBehaviour
     private void Start()
     {
         Application.logMessageReceived += ShowTips;
+        LuaLoader.EnableResourceLuaLoader();
         state = new LuaState();
         state.Start();
-        LuaBinder.Bind(state);
         state.DoFile("TestPerf.lua");                              
     }
 

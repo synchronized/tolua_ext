@@ -25,7 +25,6 @@ public class TestInjection : MonoBehaviour
         Application.logMessageReceived += ShowTips;
         luaState = new LuaState();
         luaState.Start();
-        LuaBinder.Bind(luaState);
         //For InjectByModule
         //////////////////////////////////////////////////////
         luaState.BeginModule(null);
@@ -36,7 +35,7 @@ public class TestInjection : MonoBehaviour
 
 #if ENABLE_LUA_INJECTION
 #if UNITY_EDITOR
-        if (UnityEditor.EditorPrefs.GetInt(Application.dataPath + "InjectStatus") == 1)
+        if (UnityEditor.EditorPrefs.GetInt(LuaConst.injectionStateKey) == 1)
         {
 #else
         if (true)

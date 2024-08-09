@@ -29,6 +29,7 @@ class InjectedMethodInfo
 [InitializeOnLoad]
 public static class ToLuaInjection
 {
+    static string KeyWaitForInjection = "_ToLua_WaitForInjection";
     static int offset = 0;
     static int methodCounter = 0;
     static bool EnableSymbols = true;
@@ -71,7 +72,7 @@ public static class ToLuaInjection
 
     static void InjectAll()
     {
-        var injectionStatus = EditorPrefs.GetInt(Application.dataPath + "WaitForInjection", 0);
+        var injectionStatus = EditorPrefs.GetInt(KeyWaitForInjection, 0);
         if (Application.isPlaying || EditorApplication.isCompiling || injectionStatus == 0)
         {
             return;
@@ -90,12 +91,12 @@ public static class ToLuaInjection
     [PostProcessBuildAttribute()]
     static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject)
     {
-        var injectionStatus = EditorPrefs.GetInt(Application.dataPath + "WaitForInjection", 0);
+        var injectionStatus = EditorPrefs.GetInt(KeyWaitForInjection, 0);
         if (injectionStatus == 0)
         {
             Debug.LogError("Inject Failed!!!");
         }
-        EditorPrefs.SetInt(Application.dataPath + "WaitForInjection", 0);
+        EditorPrefs.SetInt(KeyWaitForInjection, 0);
     }
 
     [PostProcessScene]
@@ -103,7 +104,7 @@ public static class ToLuaInjection
     {
         if (BuildPipeline.isBuildingPlayer)
         {
-            EditorPrefs.SetInt(Application.dataPath + "WaitForInjection", 1);
+            EditorPrefs.SetInt(KeyWaitForInjection, 1);
         }
 
         InjectAll();
@@ -114,7 +115,7 @@ public static class ToLuaInjection
     {
         if (!BuildPipeline.isBuildingPlayer)
         {
-            EditorPrefs.SetInt(Application.dataPath + "WaitForInjection", 0);
+            EditorPrefs.SetInt(KeyWaitForInjection, 0);
         }
     }
 	
@@ -127,7 +128,7 @@ public static class ToLuaInjection
             return;
         }
 
-        EditorPrefs.SetInt(Application.dataPath + "WaitForInjection", 1);
+        EditorPrefs.SetInt(KeyWaitForInjection, 1);
         if (EditorApplication.isCompiling)
         {
             EditorUtility.DisplayDialog("警告", "请等待编辑器编译完成", "确定");
@@ -150,7 +151,7 @@ public static class ToLuaInjection
         {
             return attr.AttributeType.FullName == "LuaInterface.UseDefinedAttribute";
         });
-        EditorPrefs.SetInt(Application.dataPath + "InjectStatus", alreadyInjected ? 1 : 0);
+        EditorPrefs.SetInt(LuaConst.injectionStateKey, alreadyInjected ? 1 : 0);
 
         if (bPulse)
         {
@@ -191,7 +192,7 @@ public static class ToLuaInjection
                 resultTableGroup.Clear();
                 EditorApplication.Beep();
                 Debug.Log("Lua Injection Finished!");
-                EditorPrefs.SetInt(Application.dataPath + "InjectStatus", 1);
+                EditorPrefs.SetInt(LuaConst.injectionStateKey, 1);
             }
         }
         catch (Exception e)
@@ -209,7 +210,7 @@ public static class ToLuaInjection
 
     static bool InjectPrepare(AssemblyDefinition assembly)
     {
-        bool alreadyInjected = EditorPrefs.GetInt(Application.dataPath + "InjectStatus") == 1;
+        bool alreadyInjected = EditorPrefs.GetInt(LuaConst.injectionStateKey) == 1;
         if (alreadyInjected)
         {
             Debug.Log("Already Injected!");
@@ -962,7 +963,7 @@ public static class ToLuaInjection
                 if (existInfo.methodFullSignature != methodFullSignature)
                 {
                     Debug.LogError(typeName + "." + existInfo.methodPublishedName + " 签名跟历史签名不一致，无法增量，Injection中断，请修改函数签名、或者直接删掉InjectionBridgeEditorInfo.xml（该操作会导致无法兼容线上版的包体，需要强制换包）！");
-                    EditorPrefs.SetInt(Application.dataPath + "WaitForInjection", 0);
+                    EditorPrefs.SetInt(KeyWaitForInjection, 0);
                     return -1;
                 }
                 return existInfo.methodIndex;
@@ -995,7 +996,7 @@ public static class ToLuaInjection
 
     static void ExportInjectionEditorInfo(SortedDictionary<string, List<InjectedMethodInfo>> data)
     {
-        string incrementalFilePath = CustomSettings.injectionFilesPath + "InjectionBridgeEditorInfo.xml";
+        string incrementalFilePath = GeneratorConfig.GetToLuaPath(LuaConst.injectionFilesPath) + "InjectionBridgeEditorInfo.xml";
         if (File.Exists(incrementalFilePath))
         {
             File.Delete(incrementalFilePath);
@@ -1032,7 +1033,7 @@ public static class ToLuaInjection
     {
         bridgeInfo.Clear();
         methodCounter = 0;
-        string incrementalFilePath = CustomSettings.injectionFilesPath + "InjectionBridgeEditorInfo.xml";
+        string incrementalFilePath = GeneratorConfig.GetToLuaPath(LuaConst.injectionFilesPath) + "InjectionBridgeEditorInfo.xml";
         if (!File.Exists(incrementalFilePath))
         {
             return true;

@@ -16,35 +16,13 @@ public class TestABLoader : MonoBehaviour
 
     IEnumerator CoLoadBundle(string name, string path)
     {
-#if UNITY_4_6 || UNITY_4_7
-        using (WWW www = new WWW(path))
-        {
-            if (www == null)
-            {
-                Debugger.LogError(name + " bundle not exists");
-                yield break;
-            }
-
-            yield return www;
-
-            if (www.error != null)
-            {
-                Debugger.LogError(string.Format("Read {0} failed: {1}", path, www.error));
-                yield break;
-            }
-
-            --bundleCount;
-            LuaLoader.Instance.AddSearchBundle(name, www.assetBundle);
-            www.Dispose();
-        }  
-#else
         AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(path);
         yield return request;
 
         --bundleCount;
+
         var assertLoader = LuaLoader.GetOrAddLoader<SingleAssetLuaLoader>();
         assertLoader.SetSearchBundle(name, request.assetBundle);
-#endif        
     }
 
     IEnumerator LoadFinished()
@@ -59,8 +37,7 @@ public class TestABLoader : MonoBehaviour
 
     public IEnumerator LoadBundles()
     {
-        string streamingPath = Application.streamingAssetsPath.Replace('\\', '/');
-        string dir = streamingPath + "/" + LuaConst.osDir;
+        string dir = LuaTools.GetStreamingAssetsABPath("ToLua");
 
 #if UNITY_EDITOR
         if (!Directory.Exists(dir))
@@ -69,16 +46,19 @@ public class TestABLoader : MonoBehaviour
         }
 #endif
 
-#if UNITY_4_6 || UNITY_4_7
-        //此处应该配表获取
-        List<string> list = new List<string>() { "lua.unity3d", "lua_cjson.unity3d", "lua_system.unity3d", "lua_unityengine.unity3d", "lua_protobuf.unity3d", "lua_misc.unity3d", "lua_socket.unity3d", "lua_system_reflection.unity3d" };   
-#else       
-        AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(dir + "/" + LuaConst.osDir);
+        Debugger.Log("dir:"+dir);
+        var manifestFilePath = dir + "/ToLua";
+        var request = AssetBundle.LoadFromFileAsync(manifestFilePath);
         yield return request;
 
-        AssetBundleManifest manifest = (AssetBundleManifest)request.assetBundle.LoadAsset("AssetBundleManifest");
-        List<string> list = new List<string>(manifest.GetAllAssetBundles());
-#endif
+        var assetBundle = request.assetBundle;
+        if (assetBundle == null) {
+            Debugger.LogError($"Load manifest file failed: {manifestFilePath}");
+            yield break;
+        }
+
+        AssetBundleManifest manifest = assetBundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
+        List<string> list = new(manifest.GetAllAssetBundles());
 
         bundleCount = list.Count;
 
@@ -86,11 +66,7 @@ public class TestABLoader : MonoBehaviour
         {
             string str = list[i];
 
-#if (UNITY_4_6 || UNITY_4_7) && UNITY_EDITOR
-            string path = "file:///" + streamingPath + "/" + LuaConst.osDir + "/" + str;
-#else
-            string path = streamingPath + "/" + LuaConst.osDir + "/" + str;
-#endif
+            string path = dir + "/" + str;
             string name = Path.GetFileNameWithoutExtension(str);
             StartCoroutine(CoLoadBundle(name, path));
         }

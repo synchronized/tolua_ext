@@ -30,7 +30,6 @@ public class TestOutArg : MonoBehaviour
         Application.logMessageReceived += ShowTips;
 
         state = new LuaState();
-        LuaBinder.Bind(state);
         state.Start();
         state.DoString(script, "TestOutArg.cs");
         func = state.GetFunction("TestPick");        

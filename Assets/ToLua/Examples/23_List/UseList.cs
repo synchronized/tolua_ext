@@ -40,15 +40,6 @@ public class UseList : LuaClient
                 list:AddRange(list1)
                 print(string.format('AddRange result: list[1] is %d, list[2] is %d', list[1], list[2]))
 
-                local const = list:AsReadOnly()
-                print('AsReadOnley:'..const[0])    
-
-                index = const:IndexOf(123)
-                
-                if index == 0 then
-                    print('const IndexOf is ok')
-                end
-
                 local pos = list:BinarySearch(1)
                 print('BinarySearch 1 result is: '..pos)
 
@@ -141,10 +132,6 @@ public class UseList : LuaClient
             end
         ";
 
-
-
-    //屏蔽，例子不需要运行
-    protected override void CallMain() { }
 
     protected override void OnLoadFinished()
     {

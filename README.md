@@ -84,8 +84,8 @@ https://github.com/LabOfHoward/unity_tolua-_zerobrane_api<br>
 * 目前ToLua也支持全平台统一成lua5.3的lua虚拟机环境。如果要使用lua5.3的版本，步骤如下
 * 1、前往https://github.com/topameng/tolua_runtime <br>
 * 2、将Plugins53文件夹里面的所有tolua相关的runtime底层库，都拷贝覆盖到unity工程的Plugins目录下。<br>
-* 3、打开unity编辑器，添加“**LUAC_5_3**”宏，回车等待编辑器编译完毕既是Lua5.3的虚拟机环境。<br>
-* **注意要用lua5.3宏定义“LUAC_5_3”必须一直有效！！如果用luajit或lua5.1版本的，宏定义一定要删除！！！！**<br>
+* 3、打开unity编辑器，<br>
+* **注意现在不支持luajit<br>
 * ToLua已经在ToLuaMenu.cs文件里面集成了自动化的导出32位、64位luajit的bytecode（不能混用），以及32位、64位兼容能混用的lua5.3的bytecode,<br>
 * 具体实现请查看ToLuaMenu.cs的改动，现在Lua5.3虚拟机环境的bytecode，默认32位、64位通用。<br>
 

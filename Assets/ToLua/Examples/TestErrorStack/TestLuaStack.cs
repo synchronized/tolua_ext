@@ -285,7 +285,6 @@ public class TestLuaStack : MonoBehaviour
         testGo = gameObject;                
         state = new LuaState();
         state.Start();
-        LuaBinder.Bind(state);        
 
         state.BeginModule(null);
         state.RegFunction("TestArgError", TestArgError);

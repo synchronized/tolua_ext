@@ -66,9 +66,6 @@ public class TestReflection : LuaClient
 
     string tips = null;
 
-    //屏蔽，例子不需要运行
-    protected override void CallMain() { }
-
     void TestAction()
     {
         Debugger.Log("Test Action");

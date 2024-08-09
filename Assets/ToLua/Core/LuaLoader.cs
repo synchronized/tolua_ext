@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright (c) 2015-2021 topameng(topameng@qq.com)
 https://github.com/topameng/tolua
 
@@ -271,10 +271,8 @@ namespace LuaInterface {
                 fileName = fileName.Substring(0, fileName.Length - 4);
             }
 
-            string fullPath = null;
-
             for (int i = 0; i < searchPaths.Count; i++) {
-                fullPath = searchPaths[i].Replace("?", fileName);
+                string fullPath = searchPaths[i].Replace("?", fileName);
                 if (File.Exists(fullPath)) {
                     return fullPath;
                 }
@@ -300,22 +298,21 @@ namespace LuaInterface {
         }
 
         public bool AddSearchPackage(string fullPath, bool front = false) {
-            if (!Path.IsPathRooted(fullPath)) throw new LuaException(fullPath + " is not a full path");
+            //if (!Path.IsPathRooted(fullPath)) throw new LuaException(fullPath + " is not a full path");
 
             fullPath = ToPackagePath(fullPath);
             return AddSearchPath(fullPath, front);
         }
 
         public bool RemoveSearchPackage(string fullPath) {
-            if (!Path.IsPathRooted(fullPath)) throw new LuaException(fullPath + " is not a full path");
+            //if (!Path.IsPathRooted(fullPath)) throw new LuaException(fullPath + " is not a full path");
 
             fullPath = ToPackagePath(fullPath);
             return RemoveSearchPath(fullPath);
         }
 
         private bool AddSearchPath(string path, bool front = false) {
-            int index = searchPaths.IndexOf(path);
-            if (index >= 0) return false;
+            if (searchPaths.IndexOf(path) >= 0) return false;
 
             if (front) searchPaths.Insert(0, path);
             else searchPaths.Add(path);

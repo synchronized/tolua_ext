@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright (c) 2015-2021 topameng(topameng@qq.com)
 https://github.com/topameng/tolua
 
@@ -20,9 +20,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-using UnityEngine;
 using System;
-using System.Collections;
+
+using LuaInterface.ObjectWrap;
 
 namespace LuaInterface
 {    

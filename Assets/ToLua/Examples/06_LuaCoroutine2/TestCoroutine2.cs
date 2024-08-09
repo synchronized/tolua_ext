@@ -117,9 +117,6 @@ public class TestCoroutine2 : LuaClient
         func = null;        
     }
 
-    //屏蔽，例子不需要运行
-    protected override void CallMain() { }
-
     bool beStart = false;
     string tips = null;
 

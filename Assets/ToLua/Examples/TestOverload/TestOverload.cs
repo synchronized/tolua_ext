@@ -328,7 +328,6 @@ public class TestOverload : MonoBehaviour
     {
         LuaState state = new LuaState();
         state.Start();
-        LuaBinder.Bind(state);
         Bind(state);        
         state.DoString(script, "TestOverload.cs");
 

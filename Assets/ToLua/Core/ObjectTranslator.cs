@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright (c) 2015-2021 topameng(topameng@qq.com)
 https://github.com/topameng/tolua
 
@@ -27,7 +27,7 @@ using UnityEngine;
 
 namespace LuaInterface
 {
-    public class ObjectTranslator
+    public partial class ObjectTranslator
     {        
         private class DelayGC
         {

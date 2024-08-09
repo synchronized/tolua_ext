@@ -93,17 +93,15 @@ public class TestProtoBuffer : LuaClient
         Init();
     }
 
-    protected override void Bind()
+    //添加自定义绑定
+    protected override void OnInitBinding()
     {
-        base.Bind();
+        base.OnInitBinding();
 
         luaState.BeginModule(null);
         TestProtolWrap.Register(luaState);
         luaState.EndModule();
     }
-
-    //屏蔽，例子不需要运行
-    protected override void CallMain() { }
 
     protected override void OnLoadFinished()
     {

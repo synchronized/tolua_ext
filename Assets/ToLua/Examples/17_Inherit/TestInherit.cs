@@ -77,7 +77,6 @@ public class TestInherit : MonoBehaviour
 
         lua = new LuaState();        
         lua.Start();
-        LuaBinder.Bind(lua);
         lua.DoString(script, "TestInherit.cs");
 
         float time = Time.realtimeSinceStartup;

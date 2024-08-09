@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright (c) 2015-2021 topameng(topameng@qq.com)
 https://github.com/topameng/tolua
 
@@ -124,11 +124,7 @@ namespace LuaInterface
         static void AddLuaLoader(IntPtr L)
         {
             LuaDLL.lua_getglobal(L, "package");
-#if LUAC_5_3
             LuaDLL.lua_getfield(L, -1, "searchers");
-#else
-            LuaDLL.lua_getfield(L, -1, "loaders");
-#endif
             LuaDLL.tolua_pushcfunction(L, new LuaCSFunction(Loader));
             
             for (int i = LuaDLL.lua_objlen(L, -2) + 1; i > 2; i--)
@@ -222,18 +218,18 @@ namespace LuaInterface
             {
                 string fileName = LuaDLL.lua_tostring(L, 1);
                 fileName = fileName.Replace(".", "/");
-                byte[] buffer = LuaLoader.Instance.ReadFile(fileName);
+                byte[] buffer = LuaLoader.ReadFile(fileName);
 
                 if (buffer == null)
                 {
-                    string error = LuaLoader.Instance.FindFileError(fileName);
+                    string error = LuaLoader.FindFileError(fileName);
                     LuaDLL.lua_pushstring(L, error);
                     return 1;
                 }
 
                 if (LuaConst.openLuaDebugger)
                 {
-                    fileName = LuaLoader.Instance.FindFile(fileName);
+                    fileName = LuaLoader.FindFile(fileName);
                 }
 
                 if (!fileName.EndsWith(".lua")) fileName += ".lua";
@@ -259,12 +255,12 @@ namespace LuaInterface
             {
                 string fileName = LuaDLL.lua_tostring(L, 1);
                 int n = LuaDLL.lua_gettop(L);
-                byte[] buffer = LuaLoader.Instance.ReadFile(fileName);
+                byte[] buffer = LuaLoader.ReadFile(fileName);
 
                 if (buffer == null)
                 {
                     string error = string.Format("cannot open {0}: No such file or directory", fileName);
-                    error += LuaLoader.Instance.FindFileError(fileName);
+                    error += LuaLoader.FindFileError(fileName);
                     throw new LuaException(error);
                 }
 
@@ -296,12 +292,12 @@ namespace LuaInterface
             try
             {
                 string fileName = LuaDLL.lua_tostring(L, 1);
-                byte[] buffer = LuaLoader.Instance.ReadFile(fileName);
+                byte[] buffer = LuaLoader.ReadFile(fileName);
 
                 if (buffer == null)
                 {
                     string error = string.Format("cannot open {0}: No such file or directory", fileName);
-                    error += LuaLoader.Instance.FindFileError(fileName);
+                    error += LuaLoader.FindFileError(fileName);
                     throw new LuaException(error);
                 }
 

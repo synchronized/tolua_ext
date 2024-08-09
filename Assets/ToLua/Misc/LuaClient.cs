@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright (c) 2015-2021 topameng(topameng@qq.com)
 https://github.com/topameng/tolua
 
@@ -21,253 +21,163 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 using UnityEngine;
-using System.Collections.Generic;
 using LuaInterface;
-using System.Collections;
 using System.IO;
-using System;
 #if UNITY_5_4_OR_NEWER
 using UnityEngine.SceneManagement;
 #endif
 
-public class LuaClient : MonoBehaviour
+namespace LuaInterface
 {
-    public static LuaClient Instance
+    public class LuaClient : MonoBehaviour
     {
-        get;
-        protected set;
-    }
-
-    protected LuaState luaState = null;
-    protected LuaLooper loop = null;
-    protected LuaFunction levelLoaded = null;
-
-    protected bool openLuaSocket = false;
-    protected bool beZbStart = false;
-
-    protected virtual void LoadLuaFiles()
-    {
-        OnLoadFinished();
-    }
-
-    protected virtual void OpenLibs()
-    {
-        //保持库名字与5.1.5库中一致
-        luaState.BeginPreLoad();                        
-        //luaState.AddPreLoadLib("pb2", new LuaCSFunction(LuaDLL.luaopen_pb));
-        luaState.AddPreLoadLib("struct", new LuaCSFunction(LuaDLL.luaopen_struct));
-        luaState.AddPreLoadLib("lpeg", new LuaCSFunction(LuaDLL.luaopen_lpeg));
-        luaState.AddPreLoadLib("cjson", new LuaCSFunction(LuaDLL.luaopen_cjson));
-        luaState.AddPreLoadLib("cjson.safe", new LuaCSFunction(LuaDLL.luaopen_cjson_safe));
-#if (UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX) && !LUAC_5_3
-        luaState.AddPreLoadLib("bit", new LuaCSFunction(LuaDLL.luaopen_bit));
-#endif
-
-        //新
-        luaState.AddPreLoadLib("pb", new LuaCSFunction(LuaDLL.luaopen_pb));
-        luaState.AddPreLoadLib("pb.io", new LuaCSFunction(LuaDLL.luaopen_pb_io));
-        luaState.AddPreLoadLib("pb.conv", new LuaCSFunction(LuaDLL.luaopen_pb_conv));
-        luaState.AddPreLoadLib("pb.buffer", new LuaCSFunction(LuaDLL.luaopen_pb_buffer));
-        luaState.AddPreLoadLib("pb.slice", new LuaCSFunction(LuaDLL.luaopen_pb_slice));
-        luaState.AddPreLoadLib("pb.unsafe", new LuaCSFunction(LuaDLL.luaopen_pb_unsafe));
-        luaState.AddPreLoadLib("sproto.core", new LuaCSFunction(LuaDLL.luaopen_sproto_core));
-        luaState.AddPreLoadLib("crypt", new LuaCSFunction(LuaDLL.luaopen_crypt));
-
-        if (LuaConst.openLuaSocket || LuaConst.openLuaDebugger)
+        public static LuaClient Instance
         {
-            OpenLuaSocket();
+            get;
+            protected set;
         }
 
-        luaState.EndPreLoad();          
+        protected LuaState luaState = null;
+        protected LuaLooper loop = null;
 
-        if (LuaConst.openLuaDebugger)
+        protected void Init()
         {
-            OpenZbsDebugger();
-        }
-    }
+            luaState = new LuaState();
 
-    public void OpenZbsDebugger(string ip = "localhost")
-    {
-        if (!Directory.Exists(LuaConst.zbsDir))
-        {
-            Debugger.LogWarning("ZeroBraneStudio not install or LuaConst.zbsDir not right");
-            return;
-        }
+            OnInitOpenLibs(); //添加c库
 
-        if (!string.IsNullOrEmpty(LuaConst.zbsDir))
-        {
-            luaState.AddSearchPath(LuaConst.zbsDir);
+            luaState.LuaSetTop(0);  //清掉可能残留的堆栈
+
+            OnInitBinding(); //添加csharp绑定
+
+            OnLoadFinished(); //启动loop
         }
 
-        luaState.LuaDoString(string.Format("DebugServerIp = '{0}'", ip), "@LuaClient.cs");
-    }
+        //添加c库
+        protected virtual void OnInitOpenLibs() {
+            //保持库名字与5.1.5库中一致
+            luaState.BeginPreLoad();
+            //luaState.AddPreLoadLib("pb2", new LuaCSFunction(LuaDLL.luaopen_pb));
+            luaState.AddPreLoadLib("struct", new LuaCSFunction(LuaDLL.luaopen_struct));
+            luaState.AddPreLoadLib("lpeg", new LuaCSFunction(LuaDLL.luaopen_lpeg));
+            luaState.AddPreLoadLib("cjson", new LuaCSFunction(LuaDLL.luaopen_cjson));
+            luaState.AddPreLoadLib("cjson.safe", new LuaCSFunction(LuaDLL.luaopen_cjson_safe));
 
-    protected void OpenLuaSocket()
-    {
-        LuaConst.openLuaSocket = true;        
-        luaState.AddPreLoadLib("socket.core", new LuaCSFunction(LuaDLL.luaopen_socket_core));
-        luaState.AddPreLoadLib("mime.core", new LuaCSFunction(LuaDLL.luaopen_mime_core));        
-    }
+            //新
+            luaState.AddPreLoadLib("pb", new LuaCSFunction(LuaDLL.luaopen_pb));
+            luaState.AddPreLoadLib("pb.io", new LuaCSFunction(LuaDLL.luaopen_pb_io));
+            luaState.AddPreLoadLib("pb.conv", new LuaCSFunction(LuaDLL.luaopen_pb_conv));
+            luaState.AddPreLoadLib("pb.buffer", new LuaCSFunction(LuaDLL.luaopen_pb_buffer));
+            luaState.AddPreLoadLib("pb.slice", new LuaCSFunction(LuaDLL.luaopen_pb_slice));
+            luaState.AddPreLoadLib("pb.unsafe", new LuaCSFunction(LuaDLL.luaopen_pb_unsafe));
+            luaState.AddPreLoadLib("sproto.core", new LuaCSFunction(LuaDLL.luaopen_sproto_core));
+            luaState.AddPreLoadLib("crypt", new LuaCSFunction(LuaDLL.luaopen_crypt));
 
-    //cjson 比较特殊，只new了一个table，没有注册库，这里注册一下
-    protected void OpenCJson()
-    {
-        luaState.LuaGetField(LuaIndexes.LUA_REGISTRYINDEX, "_LOADED");
-        luaState.OpenLibs(LuaDLL.luaopen_cjson);
-        luaState.LuaSetField(-2, "cjson");
+            luaState.AddPreLoadLib("socket.core", new LuaCSFunction(LuaDLL.luaopen_socket_core));
+            luaState.AddPreLoadLib("mime.core", new LuaCSFunction(LuaDLL.luaopen_mime_core));
 
-        luaState.OpenLibs(LuaDLL.luaopen_cjson_safe);
-        luaState.LuaSetField(-2, "cjson.safe");                               
-    }
+            luaState.EndPreLoad();
 
-    protected virtual void CallMain()
-    {
-        LuaFunction main = luaState.GetFunction("Main");
-        main.Call();
-        main.Dispose();
-        main = null;                
-    }
-
-    protected virtual void StartMain()
-    {
-        luaState.Require("Main");
-        levelLoaded = luaState.GetFunction("OnLevelWasLoaded");
-        CallMain();
-    }
-
-    protected void StartLooper()
-    {
-        loop = gameObject.AddComponent<LuaLooper>();
-        loop.luaState = luaState;
-    }
-
-    protected virtual void Bind()
-    {        
-        LuaBinder.Bind(luaState);
-        DelegateFactory.Init();   
-        LuaCoroutine.Register(luaState, this);        
-    }
-
-    protected void Init()
-    {        
-        luaState = new LuaState();
-        OpenLibs();
-        luaState.LuaSetTop(0);  //清掉可能残留的堆栈
-        Bind();        
-        LoadLuaFiles();        
-    }
-
-    protected void Awake()
-    {
-        Instance = this;
-        Init();
-
-#if UNITY_5_4_OR_NEWER
-        SceneManager.sceneLoaded += OnSceneLoaded;
-#endif        
-    }
-
-    protected virtual void OnLoadFinished()
-    {
-        luaState.Start();
-        StartLooper();
-        StartMain();        
-    }
-
-    void OnLevelLoaded(int level)
-    {
-        if (levelLoaded != null)
-        {
-            levelLoaded.BeginPCall();
-            levelLoaded.Push(level);
-            levelLoaded.PCall();
-            levelLoaded.EndPCall();
-        }
-
-        if (luaState != null)
-        {            
-            luaState.RefreshDelegateMap();
-        }
-    }
-
-#if UNITY_5_4_OR_NEWER
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        OnLevelLoaded(scene.buildIndex);
-    }
-#else
-    protected void OnLevelWasLoaded(int level)
-    {
-        OnLevelLoaded(level);
-    }
-#endif
-
-    public virtual void Destroy()
-    {
-        if (luaState != null)
-        {
-#if UNITY_5_4_OR_NEWER
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-#endif    
-            luaState.Call("OnApplicationQuit", false);
-            DetachProfiler();
-            LuaState state = luaState;
-            luaState = null;
-
-            if (levelLoaded != null)
+            if (LuaConst.openLuaDebugger)
             {
-                levelLoaded.Dispose();
-                levelLoaded = null;
+                OpenZbsDebugger();
+            }
+        }
+
+        //添加csharp绑定
+        protected virtual void OnInitBinding() {
+            LuaCoroutine.Register(luaState, this);
+        }
+
+        public void OpenZbsDebugger(string ip = "localhost")
+        {
+            if (!Directory.Exists(LuaConst.zbsDir))
+            {
+                Debugger.LogWarning("ZeroBraneStudio not install or LuaConst.zbsDir not right");
+                return;
             }
 
-            if (loop != null)
+            if (!string.IsNullOrEmpty(LuaConst.zbsDir))
             {
-                loop.Destroy();
-                loop = null;
+                luaState.AddSearchPackage(LuaConst.zbsDir);
             }
 
-            state.Dispose();
-            Instance = null;
+            luaState.LuaDoString(string.Format("DebugServerIp = '{0}'", ip), "@LuaClient.cs");
         }
-    }
 
-    protected void OnDestroy()
-    {
-        Destroy();
-    }
-
-    protected void OnApplicationQuit()
-    {
-        Destroy();
-    }
-
-    public static LuaState GetMainState()
-    {
-        return Instance.luaState;
-    }
-
-    public LuaLooper GetLooper()
-    {
-        return loop;
-    }
-
-    LuaTable profiler = null;
-
-    public void AttachProfiler()
-    {
-        if (profiler == null)
+        protected virtual void OnLoadFinished()
         {
-            profiler = luaState.Require<LuaTable>("UnityEngine.Profiler");
-            profiler.Call("start", profiler);
+            luaState.Start();
+            loop = gameObject.AddComponent<LuaLooper>();
+            loop.luaState = luaState;
         }
-    }
-    public void DetachProfiler()
-    {
-        if (profiler != null)
+
+
+        protected void Awake()
         {
-            profiler.Call("stop", profiler);
-            profiler.Dispose();
-            LuaProfiler.Clear();
+            Instance = this;
+            Init();
+        }
+
+        public virtual void Destroy()
+        {
+            if (luaState != null)
+            {
+                luaState.Call("OnApplicationQuit", false);
+                DetachProfiler();
+                LuaState state = luaState;
+                luaState = null;
+
+                if (loop != null)
+                {
+                    loop.Destroy();
+                    loop = null;
+                }
+
+                state.Dispose();
+                Instance = null;
+            }
+        }
+
+        protected void OnDestroy()
+        {
+            Destroy();
+        }
+
+        protected void OnApplicationQuit()
+        {
+            Destroy();
+        }
+
+        public static LuaState GetMainState()
+        {
+            return Instance.luaState;
+        }
+
+        public LuaLooper GetLooper()
+        {
+            return loop;
+        }
+
+        LuaTable profiler = null;
+
+        public void AttachProfiler()
+        {
+            if (profiler == null)
+            {
+                profiler = luaState.Require<LuaTable>("UnityEngine.Profiler");
+                profiler.Call("start", profiler);
+            }
+        }
+        public void DetachProfiler()
+        {
+            if (profiler != null)
+            {
+                profiler.Call("stop", profiler);
+                profiler.Dispose();
+                LuaProfiler.Clear();
+            }
         }
     }
+
 }

@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright (c) 2015-2021 topameng(topameng@qq.com)
 https://github.com/topameng/tolua
 
@@ -100,23 +100,7 @@ namespace LuaInterface
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int OpenReflectionLibs(IntPtr L)
         {
-            try
-            {
-                LuaState state = LuaState.Get(L);
-                state.BeginModule(null);
-                state.BeginModule("LuaInterface");
-                LuaInterface_LuaMethodWrap.Register(state);
-                LuaInterface_LuaPropertyWrap.Register(state);
-                LuaInterface_LuaFieldWrap.Register(state);
-                LuaInterface_LuaConstructorWrap.Register(state);                
-                state.EndModule();
-                state.EndModule();
-                return 0;
-            }
-            catch (Exception e)
-            {
-                return LuaDLL.toluaL_exception(L, e);
-            }
+            return 0;
         }
 
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using LuaInterface;
 
 public class ToLua_UnityEngine_Input

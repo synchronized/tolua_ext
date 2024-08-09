@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright (c) 2015-2021 topameng(topameng@qq.com)
 https://github.com/topameng/tolua
 
@@ -33,17 +33,10 @@ namespace LuaInterface
             return LuaDLL.lua_type(L, pos) == LuaTypes.LUA_TNUMBER;
         }
 
-#if LUAC_5_3
 		public bool CheckInteger(IntPtr L, int pos)
         {
 			return LuaDLL.lua_isinteger(L, pos) != 0;	
         }
-#else
-        public bool CheckInteger(IntPtr L, int pos)
-        {
-			return LuaDLL.lua_type(L, pos) == LuaTypes.LUA_TNUMBER;
-        }
-#endif
 
         public bool CheckBool(IntPtr L, int pos)
         {
@@ -52,21 +45,7 @@ namespace LuaInterface
 
         public bool CheckLong(IntPtr L, int pos)
         {
-#if LUAC_5_3
             return LuaDLL.lua_isinteger(L, pos) != 0;
-#else
-            LuaTypes luaType = LuaDLL.lua_type(L, pos);
-
-            switch (luaType)
-            {
-                case LuaTypes.LUA_TNUMBER:
-                    return true;
-                case LuaTypes.LUA_TUSERDATA:
-                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Int64;                    
-                default:
-                    return false;
-            }
-#endif
 		}
 
         public bool CheckULong(IntPtr L, int pos)
@@ -90,19 +69,11 @@ namespace LuaInterface
             return luaType == LuaTypes.LUA_TNUMBER || luaType == LuaTypes.LUA_TNIL;
         }
 
-#if LUAC_5_3       
         //需要优化,合并为1个call		
         public bool CheckNullInteger(IntPtr L, int pos)
         {
             return LuaDLL.lua_isinteger(L, pos) != 0 || LuaDLL.lua_type(L, pos) == LuaTypes.LUA_TNIL;
         }
-#else
-        public bool CheckNullInteger(IntPtr L, int pos)
-        {
-            LuaTypes luaType = LuaDLL.lua_type(L, pos);
-            return luaType == LuaTypes.LUA_TNUMBER || luaType == LuaTypes.LUA_TNIL;
-        }
-#endif
 
         public bool CheckNullBool(IntPtr L, int pos)
         {
@@ -112,24 +83,8 @@ namespace LuaInterface
 
         public bool CheckNullLong(IntPtr L, int pos)
         {
-#if LUAC_5_3
 			//需要优化,合并为1个call		
 			return LuaDLL.lua_isinteger(L, pos) != 0 || LuaDLL.lua_type(L, pos) == LuaTypes.LUA_TNIL;
-#else
-            LuaTypes luaType = LuaDLL.lua_type(L, pos);
-
-            switch (luaType)
-            {
-                case LuaTypes.LUA_TNIL:
-                    return true;
-                case LuaTypes.LUA_TNUMBER:
-                    return true;
-                case LuaTypes.LUA_TUSERDATA:
-                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Int64;                    
-                default:
-                    return false;
-            }
-#endif
 		}
 
         public bool CheckNullULong(IntPtr L, int pos)

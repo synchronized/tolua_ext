@@ -32,9 +32,6 @@ public class TestCJson : LuaClient
         func.Dispose();                        
     }
 
-    //屏蔽，例子不需要运行
-    protected override void CallMain() { }
-
     string tips;
 
     void ShowTips(string msg, string stackTrace, LogType type)

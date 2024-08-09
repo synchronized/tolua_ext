@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright (c) 2015-2021 topameng(topameng@qq.com)
 https://github.com/topameng/tolua
 
@@ -48,7 +48,7 @@ namespace LuaInterface
         }
 
         ~LuaBaseRef()
-        {            
+        {
             Dispose(false);
         }
 
@@ -61,13 +61,13 @@ namespace LuaInterface
             {
                 return;
             }
-            
+
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
         public void AddRef()
-        {            
+        {
             ++count;
             //Debugger.Log("{0} {1}AddRef to {2}", type == LuaTypes.LUA_TFUNCTION ? "Luafunction" : "LuaTable", reference, count);
         }
@@ -75,7 +75,7 @@ namespace LuaInterface
         public virtual void Dispose(bool disposeManagedResources)
         {
             if (!disposed)
-            {                
+            {
                 if (disposeManagedResources)
                 {
                     luaState.CollectByMain(reference, name, type == LuaTypes.LUA_TFUNCTION);
@@ -137,7 +137,7 @@ namespace LuaInterface
             }
 
             return true;
-        }        
+        }
 
         public override int GetHashCode()
         {
@@ -180,6 +180,6 @@ namespace LuaInterface
         public static bool operator != (LuaBaseRef a, LuaBaseRef b)
         {
             return !Equals(a, b);
-        }               
+        }
     }
 }

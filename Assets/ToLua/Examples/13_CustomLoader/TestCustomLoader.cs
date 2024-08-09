@@ -7,24 +7,16 @@ public class TestCustomLoader : LuaClient
 {
     string tips = "Test custom loader";
 
-    protected override void CallMain()
-    {
-        LuaFunction func = luaState.GetFunction("Test");
-        func.Call();
-        func.Dispose();
-    }
-
-    protected override void StartMain()
-    {
-        luaState.DoFile("TestLoader.lua");
-        CallMain();
-    }
-
     new void Awake()
     {
         Application.logMessageReceived += ShowTips;
-        
+        LuaLoader.EnableResourceLuaLoader();
         base.Awake();
+
+        luaState.DoFile("TestLoader.lua");
+        LuaFunction func = luaState.GetFunction("Test");
+        func.Call();
+        func.Dispose();
     }
 
     new void OnApplicationQuit()

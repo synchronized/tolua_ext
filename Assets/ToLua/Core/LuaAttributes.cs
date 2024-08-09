@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright (c) 2015-2021 topameng(topameng@qq.com)
 https://github.com/topameng/tolua
 
@@ -55,12 +55,12 @@ namespace LuaInterface
 
         }
     }
-    
+
     public sealed class LuaByteBufferAttribute : Attribute
-    {                
+    {
         public LuaByteBufferAttribute()
         {
-        }       
+        }
     }
 
     [AttributeUsage(AttributeTargets.Method)]
@@ -70,5 +70,35 @@ namespace LuaInterface
         public LuaRenameAttribute()
         {
         }
+    }
+
+    //如果你要生成Lua调用CSharp的代码，加这个标签
+    public sealed class ToLuaLuaCallCSharpAttribute : Attribute
+    {
+    }
+
+    //生成CSharp调用Lua，加这标签
+    //[AttributeUsage(AttributeTargets.Delegate | AttributeTargets.Interface)]
+    public class ToLuaCSharpCallLuaAttribute : Attribute
+    {
+    }
+
+    //不生成某个成员，加这标签
+    public class ToLuaBlackListAttribute : Attribute
+    {
+    }
+
+    //不生成某个类型，加这标签
+    public class ToLuaTypeBlackListAttribute : Attribute
+    {
+    }
+
+    //只能标注Dictionary<Type, List<string>>的field或者property
+    public class DoNotGenAttribute : Attribute
+    {
+    }
+
+    public class AdditionalPropertiesAttribute : Attribute
+    {
     }
 }

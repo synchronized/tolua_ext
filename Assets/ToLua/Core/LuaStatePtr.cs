@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -10,67 +10,6 @@ namespace LuaInterface
     public class LuaStatePtr
     {
         public IntPtr L;
-#if !LUAC_5_3 && UNITY_ANDROID
-        string jit = @"            
-        function Euler(x, y, z)
-            x = x * 0.0087266462599716
-            y = y * 0.0087266462599716
-            z = z * 0.0087266462599716
-
-            local sinX = math.sin(x)
-            local cosX = math.cos(x)
-            local sinY = math.sin(y)
-            local cosY = math.cos(y)
-            local sinZ = math.sin(z)
-            local cosZ = math.cos(z)
-
-            local w = cosY * cosX * cosZ + sinY * sinX * sinZ
-            x = cosY* sinX * cosZ + sinY* cosX * sinZ
-            y = sinY * cosX * cosZ - cosY * sinX * sinZ
-            z = cosY* cosX * sinZ - sinY* sinX * cosZ
-
-            return {x = x, y = y, z= z, w = w}
-        end
-
-        function Slerp(q1, q2, t)
-            local x1, y1, z1, w1 = q1.x, q1.y, q1.z, q1.w
-            local x2,y2,z2,w2 = q2.x, q2.y, q2.z, q2.w
-            local dot = x1* x2 + y1* y2 + z1* z2 + w1* w2
-
-            if dot< 0 then
-                dot = -dot
-                x2, y2, z2, w2 = -x2, -y2, -z2, -w2
-            end
-
-            if dot< 0.95 then
-                local sin = math.sin
-                local angle = math.acos(dot)
-                local invSinAngle = 1 / sin(angle)
-                local t1 = sin((1 - t) * angle) * invSinAngle
-                local t2 = sin(t * angle) * invSinAngle
-                return {x = x1* t1 + x2* t2, y = y1 * t1 + y2 * t2, z = z1 * t1 + z2 * t2, w = w1 * t1 + w2 * t2}
-            else
-                x1 = x1 + t* (x2 - x1)
-                y1 = y1 + t* (y2 - y1)                
-                z1 = z1 + t* (z2 - z1)                
-                w1 = w1 + t* (w2 - w1)
-                dot = x1* x1 + y1* y1 + z1* z1 + w1* w1
-
-                return {x = x1 / dot, y = y1 / dot, z = z1 / dot, w = w1 / dot}
-            end
-        end
-
-        if jit then
-    	    if jit.status() then                
-                for i=1,10000 do
-                    local q1 = Euler(i, i, i)
-                    Slerp({ x = 0, y = 0, z = 0, w = 1}, q1, 0.5)
-                end        
-            else
-                print('jit has been closed')
-            end	                   
-        end";
-#endif
 
         public int LuaUpValueIndex(int i)
         {
@@ -80,23 +19,6 @@ namespace LuaInterface
         public IntPtr LuaNewState()
         {
             return LuaDLL.luaL_newstate();            
-        }
-
-        public void LuaOpenJit()
-        {
-#if UNITY_ANDROID && !LUAC_5_3
-            //某些机型如三星arm64在jit on模式下会崩溃，临时关闭这里
-            if (IntPtr.Size == 8)
-            {                
-                LuaDLL.luaL_dostring(L, "jit.off()");                                                
-            }
-            else if (!LuaDLL.luaL_dostring(L, jit))
-            {
-                string str = LuaDLL.lua_tostring(L, -1);
-                LuaDLL.lua_settop(L, 0);
-                throw new Exception(str);
-            }
-#endif
         }
 
         public void LuaClose()
@@ -165,12 +87,10 @@ namespace LuaInterface
             return LuaDLL.lua_isnumber(L, idx) != 0;
         }
 
-#if LUAC_5_3
         public bool LuaIsInteger(int idx)
         {
             return LuaDLL.lua_isinteger(L, idx) != 0;
         }
-#endif
 
         public bool LuaIsString(int index)
         {
@@ -352,13 +272,6 @@ namespace LuaInterface
             return LuaDLL.lua_getmetatable(L, idx);
         }
 
-#if !LUAC_5_3
-        public void LuaGetEnv(int idx)
-        {
-            LuaDLL.lua_getfenv(L, idx);
-        }
-#endif
-
         public void LuaSetTable(int idx)
         {
             LuaDLL.lua_settable(L, idx);
@@ -384,13 +297,6 @@ namespace LuaInterface
             LuaDLL.lua_setmetatable(L, objIndex);
         }
 
-#if !LUAC_5_3
-        public void LuaSetEnv(int idx)
-        {
-            LuaDLL.lua_setfenv(L, idx);
-        }
-#endif
-
         public void LuaCall(int nArgs, int nResults)
         {
             LuaDLL.lua_call(L, nArgs, nResults);
@@ -401,7 +307,6 @@ namespace LuaInterface
             return LuaDLL.lua_pcall(L, nArgs, nResults, errfunc);
         }
 
-#if LUAC_5_3
 		public void LuaCallK(int nArgs, int nResults, IntPtr ctx, LuaKFunction k)
 		{
 			LuaDLL.lua_callk(L, nArgs, nResults, ctx, k);
@@ -416,15 +321,10 @@ namespace LuaInterface
         {
             return LuaDLL.lua_yieldk(L, nresults, ctx, k);
         }
-#endif
 
 		public int LuaResumeThread(IntPtr thread, int narg)
         {
-#if LUAC_5_3
             return LuaDLL.lua_resume(thread, L, narg);
-#else
-            return LuaDLL.lua_resume(thread, narg);
-#endif
         }
 
         public int LuaStatus()
@@ -511,17 +411,12 @@ namespace LuaInterface
 
 		public void LuaRawGlobal(string name)
         {
-#if LUAC_5_3
             LuaDLL.lua_pushglobaltable(L);
             int top = LuaDLL.lua_gettop(L);
             LuaDLL.lua_pushstring(L, name);
             LuaDLL.lua_rawget(L, top);
             //弹出global table
             LuaDLL.lua_remove(L, top);	
-#else
-			LuaDLL.lua_pushstring(L, name);
-			LuaDLL.lua_rawget(L, LuaIndexes.LUA_GLOBALSINDEX);
-#endif
         }
 
         public void LuaSetGlobal(string name)
@@ -682,7 +577,6 @@ namespace LuaInterface
         public void OpenToLuaLibs()
         {
             LuaDLL.tolua_openlibs(L);
-            LuaOpenJit();
         }
 
         public void ToLuaPushTraceback()

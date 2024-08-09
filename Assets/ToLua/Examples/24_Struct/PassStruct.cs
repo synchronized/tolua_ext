@@ -157,6 +157,4 @@ public class PassStruct : LuaClient
         GUI.Label(new Rect(Screen.width / 2 - 220, Screen.height / 2 - 200, 400, 400), tips);        
     }
 
-    //屏蔽，例子不需要运行
-    protected override void CallMain() { }
 }

@@ -250,7 +250,7 @@ local function run_script(script, env)
     end
 
     if func == nil then
-            error("Invalid syntax.")
+        error("Invalid syntax.")
     end
     func()
 

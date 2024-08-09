@@ -10,14 +10,13 @@ public class TestLuaSocket : LuaClient
     new void Awake()
     {
         Application.logMessageReceived += ShowTips;
+        LuaLoader.EnableResourceLuaLoader();
         base.Awake();
         // First, Clieck menu"Lua->Copy Lua  files to Resources"
         // Only provides http example here!Learn more luasocket knowladge through google.
         // Only supports http for now, and luasec lib (https://github.com/brunoos/luasec) need to Integrated by youself for compatible with https!
         luaState.Require("TestHttp");
     }
-
-    protected override void CallMain() { }
 
     void Update()
     {

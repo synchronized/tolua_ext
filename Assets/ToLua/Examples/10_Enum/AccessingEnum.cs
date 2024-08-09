@@ -44,7 +44,6 @@ public class AccessingEnum : MonoBehaviour
 
         state = new LuaState();
         state.Start();
-        LuaBinder.Bind(state);
 
         state.DoString(script, "AccessingEnum.cs");
         state["space"] = Space.World;

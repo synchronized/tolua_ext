@@ -1,9 +1,13 @@
-﻿using System;
+using System;
 using LuaInterface;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using System.Collections;
+
+
+namespace LuaInterface.BaseType.ObjectWrap
+{
 
 public class System_Collections_Generic_ListWrap
 {
@@ -879,3 +883,4 @@ public class System_Collections_Generic_ListWrap
 	}
 }
 
+}

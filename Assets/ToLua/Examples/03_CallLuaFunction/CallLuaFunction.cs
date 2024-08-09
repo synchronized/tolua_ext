@@ -24,7 +24,6 @@ public class CallLuaFunction : MonoBehaviour
 
         lua = new LuaState();
         lua.Start();
-        DelegateFactory.Init();        
         lua.DoString(script, "CallLuaFunction.cs");
 
         //Get the function object
