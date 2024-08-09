@@ -77,7 +77,6 @@ public class TestInt64 : MonoBehaviour
     {
         Application.logMessageReceived += ShowTips;
 
-        new LuaResLoader();
         LuaState lua = new LuaState();
         lua.Start();
         lua.DoString(script, "TestInt64.cs");

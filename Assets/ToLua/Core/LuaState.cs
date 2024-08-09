@@ -207,28 +207,9 @@ namespace LuaInterface
         {
             InitPackagePath();
 
-            if (!LuaFileUtils.Instance.beZip)
-            {
-#if UNITY_EDITOR
-                if (!Directory.Exists(LuaConst.luaDir))
-                {
-                    string msg = string.Format("luaDir path not exists: {0}, configer it in LuaConst.cs", LuaConst.luaDir);
-                    throw new LuaException(msg);
-                }
-
-                if (!Directory.Exists(LuaConst.toluaDir))
-                {
-                    string msg = string.Format("toluaDir path not exists: {0}, configer it in LuaConst.cs", LuaConst.toluaDir);
-                    throw new LuaException(msg);
-                }
-
-                AddSearchPath(LuaConst.toluaDir);
+            if (!LuaLoader.Instance.HasOtherLoader()) {
                 AddSearchPath(LuaConst.luaDir);
-#endif
-                if (LuaFileUtils.Instance.GetType() == typeof(LuaFileUtils))
-                {
-                    AddSearchPath(LuaConst.luaResDir);
-                }
+                AddSearchPath(LuaConst.toluaDir);
             }
         }
 
@@ -542,11 +523,11 @@ namespace LuaInterface
         public void RegFunction(string name, LuaCSFunction func)
         {
             IntPtr fn = Marshal.GetFunctionPointerForDelegate(func);
-            LuaDLL.tolua_function(L, name, fn);            
+            LuaDLL.tolua_function(L, name, fn);
         }
 
         public void RegVar(string name, LuaCSFunction get, LuaCSFunction set)
-        {            
+        {
             IntPtr fget = IntPtr.Zero;
             IntPtr fset = IntPtr.Zero;
 
@@ -665,12 +646,12 @@ namespace LuaInterface
                 throw new LuaException("you must call Start() first to initialize LuaState");
             }
 #endif
-            byte[] buffer = LuaFileUtils.Instance.ReadFile(fileName);
+            byte[] buffer = LuaLoader.Instance.ReadFile(fileName);
 
             if (buffer == null)
             {
                 string error = string.Format("cannot open {0}: No such file or directory", fileName);
-                error += LuaFileUtils.Instance.FindFileError(fileName);
+                error += LuaLoader.Instance.FindFileError(fileName);
                 throw new LuaException(error);
             }
 
@@ -681,7 +662,7 @@ namespace LuaInterface
         {
             if (LuaConst.openLuaDebugger)
             {
-                name = LuaFileUtils.Instance.FindFile(name);
+                name = LuaLoader.Instance.FindFile(name);
             }
 #if UNITY_5_3_OR_NEWER
             Debug.Assert(name[0] != '@');         
@@ -710,13 +691,13 @@ namespace LuaInterface
             int ret = LuaRequire(fileName);
 
             if (ret != 0)
-            {                
+            {
                 string err = LuaToString(-1);
                 LuaSetTop(top);
                 throw new LuaException(err, LuaException.GetLastError());
             }
 
-            LuaSetTop(top);            
+            LuaSetTop(top);
         }
 
         public T Require<T>(string fileName)
@@ -747,8 +728,8 @@ namespace LuaInterface
             {
                 if (!string.IsNullOrEmpty(paths[i]))
                 {
-                    string path = paths[i].Replace('\\', '/');
-                    LuaFileUtils.Instance.AddSearchPath(path);
+                    string path = paths[i];
+                    LuaLoader.AddSearchPackage(path);
                 }
             }
 
@@ -783,7 +764,7 @@ namespace LuaInterface
             }
 
             fullPath = ToPackagePath(fullPath);
-            LuaFileUtils.Instance.AddSearchPath(fullPath);        
+            LuaLoader.Instance.AddSearchPath(fullPath);        
         }
 
         public void RemoveSeachPath(string fullPath)
@@ -794,7 +775,7 @@ namespace LuaInterface
             }
 
             fullPath = ToPackagePath(fullPath);
-            LuaFileUtils.Instance.RemoveSearchPath(fullPath);
+            LuaLoader.Instance.RemoveSearchPath(fullPath);
         }        
 
         public int BeginPCall(int reference)
@@ -2124,7 +2105,7 @@ namespace LuaInterface
             beStart = false;
 #endif
 
-            LuaFileUtils.Instance.Dispose();              
+            LuaLoader.Instance.Dispose();              
         }
 
         //public virtual void Dispose(bool dispose)

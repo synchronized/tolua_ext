@@ -45,11 +45,6 @@ public class LuaClient : MonoBehaviour
     protected bool openLuaSocket = false;
     protected bool beZbStart = false;
 
-    protected virtual LuaFileUtils InitLoader()
-    {
-        return LuaFileUtils.Instance;                       
-    }
-
     protected virtual void LoadLuaFiles()
     {
         OnLoadFinished();
@@ -155,7 +150,6 @@ public class LuaClient : MonoBehaviour
 
     protected void Init()
     {        
-        InitLoader();
         luaState = new LuaState();
         OpenLibs();
         luaState.LuaSetTop(0);  //清掉可能残留的堆栈

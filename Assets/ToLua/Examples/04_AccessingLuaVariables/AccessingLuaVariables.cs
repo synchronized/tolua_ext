@@ -25,7 +25,6 @@ public class AccessingLuaVariables : MonoBehaviour
     {
         Application.logMessageReceived += ShowTips;
 
-        new LuaResLoader();
         LuaState lua = new LuaState();
         lua.Start();
         lua["Objs2Spawn"] = 5;

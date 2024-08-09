@@ -38,7 +38,6 @@ public class TestGameObject: MonoBehaviour
     {
         Application.logMessageReceived += ShowTips;
 
-        new LuaResLoader();
         lua = new LuaState();
         lua.LogGC = true;
         lua.Start();

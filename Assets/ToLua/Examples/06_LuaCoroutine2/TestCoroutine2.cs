@@ -104,10 +104,6 @@ public class TestCoroutine2 : LuaClient
     ";
 #endif
 
-    protected override LuaFileUtils InitLoader()
-    {
-        return new LuaResLoader();
-    }
 
     protected override void OnLoadFinished()
     {

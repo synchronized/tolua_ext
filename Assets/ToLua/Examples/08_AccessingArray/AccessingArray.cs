@@ -43,7 +43,6 @@ public class AccessingArray : MonoBehaviour
     {
         Application.logMessageReceived += ShowTips;
 
-        new LuaResLoader();
         lua = new LuaState();
         lua.Start();
         lua.DoString(script, "AccessingArray.cs");

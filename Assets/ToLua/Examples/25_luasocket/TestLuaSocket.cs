@@ -17,11 +17,6 @@ public class TestLuaSocket : LuaClient
         luaState.Require("TestHttp");
     }
 
-    protected override LuaFileUtils InitLoader()
-    {
-        return new LuaResLoader();
-    }
-
     protected override void CallMain() { }
 
     void Update()

@@ -22,7 +22,6 @@ public class CallLuaFunction : MonoBehaviour
     {
         Application.logMessageReceived += ShowTips;
 
-        new LuaResLoader();
         lua = new LuaState();
         lua.Start();
         DelegateFactory.Init();        

@@ -121,7 +121,6 @@ public class TestDelegate: MonoBehaviour
     {
         Application.logMessageReceived += ShowTips;
 
-        new LuaResLoader();
         state = new LuaState();
         state.Start();
         LuaBinder.Bind(state);

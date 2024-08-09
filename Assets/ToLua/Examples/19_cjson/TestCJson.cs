@@ -14,10 +14,6 @@ public class TestCJson : LuaClient
 	    print(s)
     end
 ";
-    protected override LuaFileUtils InitLoader()
-    {
-        return new LuaResLoader();
-    }   
 
     protected override void OnLoadFinished()
     {

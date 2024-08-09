@@ -7,11 +7,6 @@ public class TestCustomLoader : LuaClient
 {
     string tips = "Test custom loader";
 
-    protected override LuaFileUtils InitLoader()
-    {
-        return new LuaResLoader();
-    }
-
     protected override void CallMain()
     {
         LuaFunction func = luaState.GetFunction("Test");

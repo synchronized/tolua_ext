@@ -34,7 +34,7 @@ public class TestABLoader : MonoBehaviour
             }
 
             --bundleCount;
-            LuaFileUtils.Instance.AddSearchBundle(name, www.assetBundle);
+            LuaLoader.Instance.AddSearchBundle(name, www.assetBundle);
             www.Dispose();
         }  
 #else
@@ -42,7 +42,8 @@ public class TestABLoader : MonoBehaviour
         yield return request;
 
         --bundleCount;
-        LuaFileUtils.Instance.AddSearchBundle(name, request.assetBundle);
+        var assertLoader = LuaLoader.GetOrAddLoader<SingleAssetLuaLoader>();
+        assertLoader.SetSearchBundle(name, request.assetBundle);
 #endif        
     }
 
@@ -101,8 +102,6 @@ public class TestABLoader : MonoBehaviour
     {
         Application.logMessageReceived += ShowTips;
 
-        LuaFileUtils file = new LuaFileUtils();
-        file.beZip = true;
 #if UNITY_ANDROID && UNITY_EDITOR
         if (IntPtr.Size == 8)
         {

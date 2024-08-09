@@ -23,7 +23,6 @@ public class TestInjection : MonoBehaviour
     {
         InitGUI();
         Application.logMessageReceived += ShowTips;
-        new LuaResLoader();
         luaState = new LuaState();
         luaState.Start();
         LuaBinder.Bind(luaState);

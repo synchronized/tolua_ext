@@ -42,7 +42,6 @@ public class TestLuaThread : MonoBehaviour
     {
         Application.logMessageReceived += ShowTips;
 
-        new LuaResLoader();
         state = new LuaState();
         state.Start();
         state.LogGC = true;

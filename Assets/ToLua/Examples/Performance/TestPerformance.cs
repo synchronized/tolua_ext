@@ -13,7 +13,6 @@ public class TestPerformance : MonoBehaviour
     private void Start()
     {
         Application.logMessageReceived += ShowTips;
-        new LuaResLoader();
         state = new LuaState();
         state.Start();
         LuaBinder.Bind(state);

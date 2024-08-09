@@ -66,12 +66,6 @@ public class TestReflection : LuaClient
 
     string tips = null;
 
-    protected override LuaFileUtils InitLoader()
-    {
-        Application.logMessageReceived += ShowTips;
-        return new LuaResLoader();
-    }
-
     //屏蔽，例子不需要运行
     protected override void CallMain() { }
 

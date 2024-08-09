@@ -22,10 +22,6 @@ public class TestString : LuaClient
     end
 ";
 
-    protected override LuaFileUtils InitLoader()
-    {
-        return new LuaResLoader();
-    }
 
     //屏蔽，例子不需要运行
     protected override void CallMain() { }

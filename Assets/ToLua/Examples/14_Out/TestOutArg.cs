@@ -29,7 +29,6 @@ public class TestOutArg : MonoBehaviour
     {
         Application.logMessageReceived += ShowTips;
 
-        new LuaResLoader();
         state = new LuaState();
         LuaBinder.Bind(state);
         state.Start();

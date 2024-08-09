@@ -67,7 +67,6 @@ public class UseDictionary : MonoBehaviour
     {
         Application.logMessageReceived += ShowTips;
 
-        new LuaResLoader();
         map.Add(1, new TestAccount(1, "水水", 0));
         map.Add(2, new TestAccount(2, "王伟", 1));
         map.Add(3, new TestAccount(3, "王芳", 0));

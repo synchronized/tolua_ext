@@ -152,11 +152,6 @@ public class PassStruct : LuaClient
     LuaFunction NewRect = null;
     LuaFunction GetRect = null;    
 
-    protected override LuaFileUtils InitLoader()
-    {
-        return new LuaResLoader();
-    }
-
     private void OnGUI()
     {
         GUI.Label(new Rect(Screen.width / 2 - 220, Screen.height / 2 - 200, 400, 400), tips);        

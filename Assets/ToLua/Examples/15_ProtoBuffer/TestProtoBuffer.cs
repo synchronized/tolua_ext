@@ -93,11 +93,6 @@ public class TestProtoBuffer : LuaClient
         Init();
     }
 
-    protected override LuaFileUtils InitLoader()
-    {
-        return new LuaResLoader();
-    }
-
     protected override void Bind()
     {
         base.Bind();

@@ -282,7 +282,6 @@ public class TestLuaStack : MonoBehaviour
     {
         Application.logMessageReceived += ShowTips;
         Instance = this;
-        new LuaResLoader();
         testGo = gameObject;                
         state = new LuaState();
         state.Start();
